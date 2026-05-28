@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Consulta tu sede</title>
+<title>Entrega de tarjetas Rita Cetina-Primaria</title>
 
 <style>
 
@@ -13,7 +14,7 @@ body{
   margin:0;
   padding:0;
   font-family: Arial, sans-serif;
-  background:#eef4fb;
+  background:#f7f2f4;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -31,7 +32,7 @@ body{
 }
 
 h1{
-  color:#0b5394;
+  color:#7a1f3d;
   font-size:34px;
   margin-bottom:10px;
 }
@@ -48,16 +49,22 @@ input{
   padding:18px;
   font-size:24px;
   border-radius:15px;
-  border:2px solid #cbd5e1;
+  border:2px solid #d6c5cb;
   box-sizing:border-box;
   text-align:center;
+}
+
+input:focus{
+  outline:none;
+  border-color:#7a1f3d;
+  box-shadow:0 0 8px rgba(122,31,61,0.25);
 }
 
 button{
   width:100%;
   margin-top:20px;
   padding:18px;
-  background:#0b5394;
+  background:#7a1f3d;
   color:white;
   border:none;
   border-radius:15px;
@@ -67,19 +74,20 @@ button{
 }
 
 button:hover{
-  background:#073763;
+  background:#5e1730;
 }
 
 .card{
   margin-top:30px;
-  background:#f8fbff;
+  background:#faf5f7;
   border-radius:20px;
   padding:25px;
   text-align:left;
+  border:1px solid #eadde2;
 }
 
 .card h2{
-  color:#0b5394;
+  color:#7a1f3d;
   margin-top:0;
   margin-bottom:20px;
 }
@@ -98,7 +106,7 @@ button:hover{
 
 .error{
   margin-top:20px;
-  color:red;
+  color:#c62828;
   font-size:22px;
   font-weight:bold;
 }
@@ -106,7 +114,7 @@ button:hover{
 .loader{
   margin-top:20px;
   font-size:22px;
-  color:#0b5394;
+  color:#7a1f3d;
 }
 
 .footer{
@@ -123,10 +131,10 @@ button:hover{
 
 <div class="container">
 
-  <h1>📍 Consulta tu sede</h1>
+  <h1>🎓 Entrega de tarjetas Rita Cetina-Primaria</h1>
 
   <div class="subtitulo">
-    Consulta la sede en donde te entregaremos tu tarjeta.
+    Coloca la clave de la escuela para conocer la programación.
   </div>
 
   <input
@@ -175,7 +183,7 @@ async function buscar(){
     </p>
   `;
 
-  // 🔥 URL con anti-caché (ESTO ARREGLA TU PROBLEMA)
+  // 🔥 URL con anti-caché
   const url = "https://script.google.com/macros/s/AKfycbxtl4V2dcZDiTLTWBFWz-_0WwhOjieoKRqdYHhuXq2Otaf2j5ywJrmRxWMGa7xEiCpJ/exec";
 
   try{
@@ -242,3 +250,4 @@ async function buscar(){
 
 </body>
 </html>
+```
