@@ -1,87 +1,23 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Consulta de Tarjetas</title>
-
-  <style>
-    body{
-      font-family: Arial;
-      max-width: 600px;
-      margin: 50px auto;
-      padding: 20px;
-      background: #f5f5f5;
-    }
-
-    h1{
-      text-align: center;
-    }
-
-    input{
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-
-    button{
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      cursor: pointer;
-      background: #007bff;
-      color: white;
-      border: none;
-    }
-
-    #resultado{
-      margin-top: 20px;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-    }
-  </style>
-</head>
-
-<body>
-
-<h1>Consulta tu sede</h1>
-
-<input type="text" id="cct" placeholder="Ingresa tu CCT">
-
-<button onclick="alert('EL BOTÓN SÍ FUNCIONA')">
-  Consultar
-</button>
-
-<div id="resultado"></div>
-
-<script>
-
-async function buscar(){
+async function buscar() {
 
   const cct = document.getElementById("cct").value.trim();
 
-  const url = "https://script.google.com/macros/s/AKfycbx17vQ0wXRxWs6FYdal7uZFzV9vS7BFlkBtgRBhZ9-XGAgFaw4bK30IWe9B0GAuNd1c/exec" + "?cct=" + encodeURIComponent(cct);
+  const url = "https://script.google.com/macros/s/AKfycbx17vQ0wXRxWs6FYdal7uZFzV9vS7BFlkBtgRBhZ9-XGAgFaw4bK30IWe9B0GAuNd1c/exec";
 
-  const respuesta = await fetch(url);
+  const respuesta = await fetch(url + "?cct=" + encodeURIComponent(cct));
   const datos = await respuesta.json();
 
   const div = document.getElementById("resultado");
 
-  if(datos.error){
-    div.innerHTML = "<p><strong>" + datos.error + "</strong></p>";
+  if (datos.error) {
+    div.innerHTML = "<p><b>" + datos.error + "</b></p>";
   } else {
     div.innerHTML = `
       <h2>${datos.escuela}</h2>
-      <p><strong>Fecha:</strong> ${datos.fecha}</p>
-      <p><strong>Hora:</strong> ${datos.hora}</p>
-      <p><strong>Sede:</strong> ${datos.sede}</p>
-      <p><strong>Dirección:</strong> ${datos.direccion}</p>
+      <p><b>Fecha:</b> ${datos.fecha}</p>
+      <p><b>Hora:</b> ${datos.hora}</p>
+      <p><b>Sede:</b> ${datos.sede}</p>
+      <p><b>Dirección:</b> ${datos.direccion}</p>
     `;
   }
 }
-
-</script>
-
-</body>
-</html>IEN?IEN?
