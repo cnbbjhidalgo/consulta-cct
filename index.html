@@ -49,7 +49,9 @@
 
 <input type="text" id="cct" placeholder="Ingresa tu CCT">
 
-<button onclick="buscar()">Consultar</button>
+<button onclick="alert('EL BOTÓN SÍ FUNCIONA')">
+  Consultar
+</button>
 
 <div id="resultado"></div>
 
@@ -59,7 +61,7 @@ async function buscar(){
 
   const cct = document.getElementById("cct").value.trim();
 
-  const url = "PEGA_AQUI_TU_URL" + "?cct=" + encodeURIComponent(cct);
+  const url = "https://script.google.com/macros/s/AKfycbx17vQ0wXRxWs6FYdal7uZFzV9vS7BFlkBtgRBhZ9-XGAgFaw4bK30IWe9B0GAuNd1c/exec" + "?cct=" + encodeURIComponent(cct);
 
   const respuesta = await fetch(url);
   const datos = await respuesta.json();
