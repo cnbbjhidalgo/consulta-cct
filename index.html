@@ -1,23 +1,244 @@
-async function buscar() {
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
 
-  const cct = document.getElementById("cct").value.trim();
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  const url = "https://script.google.com/macros/s/AKfycbx17vQ0wXRxWs6FYdal7uZFzV9vS7BFlkBtgRBhZ9-XGAgFaw4bK30IWe9B0GAuNd1c/exec";
+<title>Consulta tu sede</title>
 
-  const respuesta = await fetch(url + "?cct=" + encodeURIComponent(cct));
-  const datos = await respuesta.json();
+<style>
+
+body{
+  margin:0;
+  padding:0;
+  font-family: Arial, sans-serif;
+  background:#eef4fb;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+
+.container{
+  width:90%;
+  max-width:550px;
+  background:white;
+  border-radius:25px;
+  padding:35px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.12);
+  text-align:center;
+}
+
+h1{
+  color:#0b5394;
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.subtitulo{
+  font-size:20px;
+  color:#444;
+  margin-bottom:30px;
+  line-height:1.5;
+}
+
+input{
+  width:100%;
+  padding:18px;
+  font-size:24px;
+  border-radius:15px;
+  border:2px solid #cbd5e1;
+  box-sizing:border-box;
+  text-align:center;
+}
+
+button{
+  width:100%;
+  margin-top:20px;
+  padding:18px;
+  background:#0b5394;
+  color:white;
+  border:none;
+  border-radius:15px;
+  font-size:26px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  background:#073763;
+}
+
+.card{
+  margin-top:30px;
+  background:#f8fbff;
+  border-radius:20px;
+  padding:25px;
+  text-align:left;
+}
+
+.card h2{
+  color:#0b5394;
+  margin-top:0;
+  margin-bottom:20px;
+}
+
+.item{
+  margin-bottom:18px;
+  font-size:20px;
+  color:#333;
+  line-height:1.5;
+}
+
+.icon{
+  font-size:24px;
+  margin-right:10px;
+}
+
+.error{
+  margin-top:20px;
+  color:red;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.loader{
+  margin-top:20px;
+  font-size:22px;
+  color:#0b5394;
+}
+
+.footer{
+  margin-top:25px;
+  font-size:16px;
+  color:#777;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>📍 Consulta tu sede</h1>
+
+  <div class="subtitulo">
+    Consulta la sede en donde te entregaremos tu tarjeta.
+  </div>
+
+  <input
+    type="text"
+    id="cct"
+    placeholder="Ingresa tu CCT"
+  >
+
+  <button onclick="buscar()">
+    🔎 CONSULTAR
+  </button>
+
+  <div id="resultado"></div>
+
+  <div class="footer">
+    Secretaría de Educación
+  </div>
+
+</div>
+
+<script>
+
+async function buscar(){
+
+  const cct = document
+    .getElementById("cct")
+    .value
+    .trim();
 
   const div = document.getElementById("resultado");
 
-  if (datos.error) {
-    div.innerHTML = "<p><b>" + datos.error + "</b></p>";
-  } else {
+  if(!cct){
+
     div.innerHTML = `
-      <h2>${datos.escuela}</h2>
-      <p><b>Fecha:</b> ${datos.fecha}</p>
-      <p><b>Hora:</b> ${datos.hora}</p>
-      <p><b>Sede:</b> ${datos.sede}</p>
-      <p><b>Dirección:</b> ${datos.direccion}</p>
+      <p class="error">
+        ⚠️ Ingresa tu CCT
+      </p>
+    `;
+
+    return;
+  }
+
+  div.innerHTML = `
+    <p class="loader">
+      ⏳ Consultando información...
+    </p>
+  `;
+
+  const url = "https://script.google.com/macros/s/AKfycbx17vQ0wXRxWs6FYdal7uZFzV9vS7BFlkBtgRBhZ9-XGAgFaw4bK30IWe9B0GAuNd1c/exec";
+
+  try{
+
+    const respuesta = await fetch(
+      url + "?cct=" + encodeURIComponent(cct)
+    );
+
+    const datos = await respuesta.json();
+
+    if(datos.error){
+
+      div.innerHTML = `
+        <p class="error">
+          ❌ ${datos.error}
+        </p>
+      `;
+
+    }else{
+
+      div.innerHTML = `
+        <div class="card">
+
+          <h2>🏫 ${datos.escuela}</h2>
+
+          <div class="item">
+            <span class="icon">📅</span>
+            <b>Fecha:</b> ${datos.fecha}
+          </div>
+
+          <div class="item">
+            <span class="icon">⏰</span>
+            <b>Hora:</b> ${datos.hora}
+          </div>
+
+          <div class="item">
+            <span class="icon">🏢</span>
+            <b>Sede:</b> ${datos.sede}
+          </div>
+
+          <div class="item">
+            <span class="icon">📍</span>
+            <b>Dirección:</b> ${datos.direccion}
+          </div>
+
+        </div>
+      `;
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    div.innerHTML = `
+      <p class="error">
+        ⚠️ Error al consultar información
+      </p>
     `;
   }
 }
+
+</script>
+
+</body>
+</html>
+```
