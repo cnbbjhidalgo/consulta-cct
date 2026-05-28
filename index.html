@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -176,12 +175,14 @@ async function buscar(){
     </p>
   `;
 
+  // 🔥 URL con anti-caché (ESTO ARREGLA TU PROBLEMA)
   const url = "https://script.google.com/macros/s/AKfycbxtl4V2dcZDiTLTWBFWz-_0WwhOjieoKRqdYHhuXq2Otaf2j5ywJrmRxWMGa7xEiCpJ/exec";
 
   try{
 
     const respuesta = await fetch(
-      url + "?cct=" + encodeURIComponent(cct)
+      url + "?cct=" + encodeURIComponent(cct) + "&t=" + new Date().getTime(),
+      { cache: "no-store" }
     );
 
     const datos = await respuesta.json();
@@ -241,4 +242,3 @@ async function buscar(){
 
 </body>
 </html>
-```
