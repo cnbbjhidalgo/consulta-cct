@@ -3,543 +3,442 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Consulta de Asambleas Informativas - Hidalgo</title>
-
+<title>Asambleas Informativas Beca Universal de Educación Media Superior “Benito Juárez” y Jóvenes Escribiendo el Futuro Hidalgo</title>
 <style>
-
 body{
   margin:0;
   padding:0;
-  font-family:Arial, Helvetica, sans-serif;
-  background:#f4f4f4;
-  color:#333;
+  font-family: Arial, sans-serif;
+  background:#f7f2f4;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
 }
-
-.contenedor{
-  max-width:850px;
-  margin:30px auto;
-  padding:20px;
-}
-
-.card{
+.container{
+  width:90%;
+  max-width:550px;
   background:white;
-  border-radius:15px;
-  padding:30px;
-  box-shadow:0 4px 15px rgba(0,0,0,0.12);
+  border-radius:25px;
+  padding:35px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.12);
   text-align:center;
 }
-
-.logo{
-  max-width:320px;
-  max-height:180px;
-  width:auto;
-  height:auto;
-  object-fit:contain;
-  margin-bottom:20px;
-}
-
 h1{
   color:#7a1f3d;
-  font-size:28px;
-  line-height:1.3;
-  margin:10px 0 15px;
+  font-size:34px;
+  margin-bottom:10px;
+  line-height:1.4;
 }
-
 .subtitulo{
-  font-size:17px;
-  margin-bottom:25px;
-  color:#555;
+  font-size:20px;
+  color:#444;
+  margin-bottom:30px;
+  line-height:1.5;
 }
-
 input{
-  width:90%;
-  max-width:450px;
-  padding:14px;
-  font-size:18px;
-  border:1px solid #bbb;
-  border-radius:8px;
+  width:100%;
+  padding:18px;
+  font-size:24px;
+  border-radius:15px;
+  border:2px solid #d6c5cb;
   box-sizing:border-box;
-  text-transform:uppercase;
-  margin-bottom:15px;
+  text-align:center;
 }
-
+input:focus{
+  outline:none;
+  border-color:#7a1f3d;
+  box-shadow:0 0 8px rgba(122,31,61,0.25);
+}
 button{
+  width:100%;
+  margin-top:20px;
+  padding:18px;
   background:#7a1f3d;
   color:white;
   border:none;
-  padding:14px 30px;
-  font-size:17px;
-  border-radius:8px;
+  border-radius:15px;
+  font-size:26px;
   cursor:pointer;
+  transition:0.3s;
 }
-
 button:hover{
-  background:#5f1830;
+  background:#5e1730;
 }
-
-#mensaje{
-  margin-top:20px;
-  font-weight:bold;
-}
-
-.resultado{
-  margin-top:25px;
+.card{
+  margin-top:30px;
+  background:#faf5f7;
+  border-radius:20px;
+  padding:25px;
   text-align:left;
-  background:#fafafa;
-  border-left:6px solid #7a1f3d;
-  border-radius:8px;
-  padding:20px;
+  border:1px solid #eadde2;
 }
-
-.resultado h2{
+.card h2{
   color:#7a1f3d;
   margin-top:0;
+  margin-bottom:20px;
 }
-
-.dato{
-  margin:10px 0;
-  font-size:16px;
+.item{
+  margin-bottom:18px;
+  font-size:20px;
+  color:#333;
+  line-height:1.5;
 }
-
-.dato strong{
+.icon{
+  font-size:24px;
+  margin-right:10px;
+}
+.error{
+  margin-top:20px;
+  color:#c62828;
+  font-size:22px;
+  font-weight:bold;
+}
+.loader{
+  margin-top:20px;
+  font-size:22px;
   color:#7a1f3d;
 }
-
-.imagenInferior{
-  margin-top:30px;
+.footer{
+  margin-top:25px;
+  font-size:16px;
+  color:#777;
 }
-
-.imagenInferior img{
-  width:100%;
-  max-width:800px;
-  height:auto;
-  border-radius:12px;
-  display:block;
-  margin:0 auto;
+/* Estilo para la imagen ubicada debajo del resultado */
+.imagen-inferior {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  margin: 25px auto 0 auto;
+  display: block;
+  border-radius: 12px;
 }
-
-.oculto{
-  display:none;
-}
-
-@media(max-width:600px){
-
-  .contenedor{
-    margin:10px auto;
-    padding:10px;
-  }
-
-  .card{
-    padding:20px 15px;
-  }
-
-  h1{
-    font-size:23px;
-  }
-
-  .subtitulo{
-    font-size:15px;
-  }
-
-  .logo{
-    max-width:250px;
-    max-height:140px;
-  }
-
-  input{
-    width:100%;
-  }
-
-  button{
-    width:100%;
-  }
-
-}
-
 </style>
 </head>
 
-
 <body>
 
-<div class="contenedor">
+<div class="container">
 
-  <div class="card">
+  <!-- Imagen principal -->
+  <img
+    id="logoPrincipal"
+    src="CNBBBJ.png"
+    alt="Logo Principal"
+    style="max-width: 100%; height: auto; margin-bottom: 15px;"
+  >
 
-    <!-- IMAGEN INICIAL -->
-    <img
-      id="logoPrincipal"
-      class="logo"
-      src="CNBBBJ.png"
-      alt="CNBBBJ"
-    >
-
-    <!-- TITULO -->
-    <h1 id="tituloPrincipal">
-      Asambleas Informativas<br>
-      Beca Universal de Educación Media Superior "Benito Juárez"<br>
-      y Jóvenes Escribiendo el Futuro<br>
-      Hidalgo
-    </h1>
-
-    <div class="subtitulo">
-      Coloca la clave de la escuela para conocer la programación.
-    </div>
-
-
-    <!-- BUSCADOR -->
-    <input
-      type="text"
-      id="cct"
-      placeholder="Ejemplo: 13EBH0000X"
-      maxlength="15"
-    >
-
+  <h1 id="tituloPrincipal">
+    Asambleas Informativas
     <br>
+    Beca Universal de Educación Media Superior "Benito Juárez"
+    <br>
+    y Jóvenes Escribiendo el Futuro<br>
+    Hidalgo
+  </h1>
 
-    <button onclick="consultarCCT()">
-      Consultar
-    </button>
+  <div class="subtitulo">
+    Coloca la clave de la escuela para conocer la programación.
+  </div>
 
+  <input
+    type="text"
+    id="cct"
+    placeholder="Ingresa tu CCT"
+  >
 
-    <!-- MENSAJE -->
-    <div id="mensaje"></div>
+  <button onclick="buscar()">
+    🔎 CONSULTAR
+  </button>
 
+  <div id="resultado"></div>
 
-    <!-- RESULTADO -->
-    <div
-      id="resultado"
-      class="resultado oculto"
-    >
-
-      <h2>Información de la escuela</h2>
-
-      <div class="dato">
-        <strong>Escuela:</strong>
-        <span id="escuela"></span>
-      </div>
-
-      <div class="dato">
-        <strong>Atención:</strong>
-        <span id="atencion"></span>
-      </div>
-
-      <div class="dato">
-        <strong>Sede:</strong>
-        <span id="sede"></span>
-      </div>
-
-      <div class="dato">
-        <strong>Dirección:</strong>
-        <span id="direccion"></span>
-      </div>
-
-    </div>
-
-
-    <!-- IMAGEN INFERIOR -->
-    <div
-      id="imagenInferior"
-      class="imagenInferior"
-    ></div>
-
+  <div class="footer">
+    Becas Bienestar<br>
+    Coordinación Nacional<br>
+    Hidalgo
   </div>
 
 </div>
 
-
 <script>
 
-/* =====================================================
-   URL DE TU GOOGLE APPS SCRIPT
-   ===================================================== */
+async function buscar(){
 
-const URL_SCRIPT =
-"https://script.google.com/macros/s/AKfycbzzV64AGsFJNJ6YCDQg5qIDX-Lmnd3DDYGewrMVrKuA-PCuFuolZ9jQgb8ErOmFKP4L/exec";
-
-
-/* =====================================================
-   ELEMENTOS DE LA PÁGINA
-   ===================================================== */
-
-const cctInput = document.getElementById("cct");
-const mensaje = document.getElementById("mensaje");
-const resultado = document.getElementById("resultado");
-
-const escuela = document.getElementById("escuela");
-const atencion = document.getElementById("atencion");
-const sede = document.getElementById("sede");
-const direccion = document.getElementById("direccion");
-
-const logoPrincipal = document.getElementById("logoPrincipal");
-const tituloPrincipal = document.getElementById("tituloPrincipal");
-const imagenInferior = document.getElementById("imagenInferior");
-
-
-/* =====================================================
-   TITULO ORIGINAL
-   ===================================================== */
-
-const tituloOriginal = `
-Asambleas Informativas<br>
-Beca Universal de Educación Media Superior "Benito Juárez"<br>
-y Jóvenes Escribiendo el Futuro<br>
-Hidalgo
-`;
-
-
-/* =====================================================
-   FUNCIÓN PARA CAMBIAR LOGO, TITULO E IMAGEN
-   ===================================================== */
-
-function cambiarPrograma(programa){
-
-  const programaLimpio = String(programa || "")
+  const cct = document
+    .getElementById("cct")
+    .value
     .trim()
     .toUpperCase();
 
-
-  /* ==========================================
-     S311 - EDUCACIÓN MEDIA SUPERIOR
-     ========================================== */
-
-  if(programaLimpio === "S311"){
-
-    logoPrincipal.src = "LOGO EMS.png";
-
-    tituloPrincipal.innerHTML = `
-      Asambleas Informativas<br>
-      Beca Universal de Educación Media Superior "Benito Juárez"
-    `;
-
-    imagenInferior.innerHTML = `
-      <img
-        src="EMS.jpeg"
-        alt="Beca Universal de Educación Media Superior Benito Juárez"
-      >
-    `;
-
-  }
+  const div = document.getElementById("resultado");
+  const logoPrincipal = document.getElementById("logoPrincipal");
+  const tituloPrincipal = document.getElementById("tituloPrincipal");
 
 
-  /* ==========================================
-     S283 - JÓVENES ESCRIBIENDO EL FUTURO
-     ========================================== */
+  // ==========================================
+  // VALORES ORIGINALES
+  // ==========================================
 
-  else if(programaLimpio === "S283"){
+  const tituloOriginal = `
+    Asambleas Informativas
+    <br>
+    Beca Universal de Educación Media Superior "Benito Juárez"
+    <br>
+    y Jóvenes Escribiendo el Futuro
+    <br>
+    Hidalgo
+  `;
 
-    logoPrincipal.src = "LOGO JEF.png";
-
-    tituloPrincipal.innerHTML = `
-      Asambleas Informativas<br>
-      Beca Jóvenes Escribiendo el Futuro
-    `;
-
-    imagenInferior.innerHTML = `
-      <img
-        src="JEF.jpeg"
-        alt="Beca Jóvenes Escribiendo el Futuro"
-      >
-    `;
-
-  }
+  const logoOriginal = "CNBBBJ.png";
 
 
-  /* ==========================================
-     S072 - EDUCACIÓN BÁSICA
-     ========================================== */
+  // ==========================================
+  // FUNCIÓN PARA RESTAURAR VALORES INICIALES
+  // ==========================================
 
-  else if(programaLimpio === "S072"){
+  function resetDefault(){
 
-    logoPrincipal.src = "LOGO BASICA.png";
-
-    tituloPrincipal.innerHTML = `
-      Asambleas Informativas<br>
-      Beca Universal de Educación Básica Rita Cetina Gutiérrez
-    `;
-
-    imagenInferior.innerHTML = `
-      <img
-        src="BASICA.jpeg"
-        alt="Beca Universal de Educación Básica Rita Cetina"
-      >
-    `;
-
-  }
-
-
-  /* ==========================================
-     SI NO SE RECONOCE EL PROGRAMA
-     ========================================== */
-
-  else{
-
-    logoPrincipal.src = "CNBBBJ.png";
+    logoPrincipal.src = logoOriginal;
 
     tituloPrincipal.innerHTML = tituloOriginal;
 
-    imagenInferior.innerHTML = "";
-
   }
 
-}
 
+  // ==========================================
+  // VALIDAR CCT
+  // ==========================================
 
-/* =====================================================
-   FUNCIÓN PRINCIPAL DE CONSULTA
-   ===================================================== */
+  if(!cct){
 
-async function consultarCCT(){
+    div.innerHTML = `
+      <p class="error">
+        ⚠️ Ingresa tu CCT
+      </p>
+    `;
 
-  const cctBuscado = cctInput.value
-    .trim()
-    .toUpperCase();
-
-
-  /* ==========================================
-     VALIDAR QUE SE HAYA ESCRITO UN CCT
-     ========================================== */
-
-  if(!cctBuscado){
-
-    mensaje.style.color = "#7a1f3d";
-    mensaje.textContent = "Por favor, coloca una clave CCT.";
-
-    resultado.classList.add("oculto");
+    resetDefault();
 
     return;
   }
 
 
-  /* ==========================================
-     MENSAJE DE CARGA
-     ========================================== */
+  // ==========================================
+  // MENSAJE DE CONSULTA
+  // ==========================================
 
-  mensaje.style.color = "#555";
-  mensaje.textContent = "Consultando información...";
+  div.innerHTML = `
+    <p class="loader">
+      ⏳ Consultando información...
+    </p>
+  `;
 
-  resultado.classList.add("oculto");
+
+  // ==========================================
+  // GOOGLE APPS SCRIPT
+  // ==========================================
+
+  const url =
+    "https://script.google.com/macros/s/AKfycbzzV64AGsFJNJ6YCDQg5qIDX-Lmnd3DDYGewrMVrKuA-PCuFuolZ9jQgb8ErOmFKP4L/exec";
 
 
   try{
 
-    /* ==========================================
-       CONSULTA AL GOOGLE APPS SCRIPT
-       ========================================== */
-
-    const url =
-      URL_SCRIPT +
+    const respuesta = await fetch(
+      url +
       "?cct=" +
-      encodeURIComponent(cctBuscado) +
+      encodeURIComponent(cct) +
       "&t=" +
-      new Date().getTime();
-
-
-    const respuesta = await fetch(url);
-
-
-    if(!respuesta.ok){
-
-      throw new Error(
-        "No fue posible comunicarse con el servidor."
-      );
-
-    }
+      new Date().getTime(),
+      {
+        cache: "no-store"
+      }
+    );
 
 
     const datos = await respuesta.json();
 
 
-    /* ==========================================
-       CCT NO ENCONTRADO
-       ========================================== */
+    // ==========================================
+    // SI EL CCT NO EXISTE
+    // ==========================================
 
     if(datos.error){
 
-      mensaje.style.color = "#7a1f3d";
-      mensaje.textContent = datos.error;
+      div.innerHTML = `
+        <p class="error">
+          ❌ ${datos.error}
+        </p>
+      `;
 
-      resultado.classList.add("oculto");
+      resetDefault();
 
-      return;
     }
 
 
-    /* ==========================================
-       MOSTRAR INFORMACIÓN
-       ========================================== */
+    // ==========================================
+    // CCT ENCONTRADO
+    // ==========================================
 
-    escuela.textContent =
-      datos.escuela || "Pendiente";
+    else{
 
-    atencion.textContent =
-      datos.atencion || "Pendiente";
-
-    sede.textContent =
-      datos.sede || "Pendiente";
-
-    direccion.textContent =
-      datos.direccion || "Pendiente";
+      let imagenInferiorHTML = "";
 
 
-    /* ==========================================
-       CAMBIAR SEGÚN EL PROGRAMA
-       ========================================== */
+      // ==========================================
+      // PROGRAMA S311
+      // ==========================================
 
-    cambiarPrograma(datos.columnaC);
+      if(
+        String(datos.columnaC || "")
+        .trim()
+        .toUpperCase() === "S311"
+      ){
+
+        tituloPrincipal.innerHTML = `
+          Asambleas Informativas
+          <br>
+          Beca Universal de Educación Media Superior "Benito Juárez"
+        `;
+
+        logoPrincipal.src = "LOGO EMS.png";
+
+        imagenInferiorHTML = `
+          <img
+            src="EMS.jpeg"
+            alt="Logo EMS"
+            class="imagen-inferior"
+          >
+        `;
+
+      }
 
 
-    /* ==========================================
-       MOSTRAR RESULTADO
-       ========================================== */
+      // ==========================================
+      // PROGRAMA S283
+      // ==========================================
 
-    resultado.classList.remove("oculto");
+      else if(
+        String(datos.columnaC || "")
+        .trim()
+        .toUpperCase() === "S283"
+      ){
 
-    mensaje.textContent = "";
+        tituloPrincipal.innerHTML = `
+          Asambleas Informativas
+          <br>
+          Beca Jóvenes Escribiendo el Futuro
+        `;
+
+        logoPrincipal.src = "LOGO JEF.png";
+
+        imagenInferiorHTML = `
+          <img
+            src="JEF.jpeg"
+            alt="Logo JEF"
+            class="imagen-inferior"
+          >
+        `;
+
+      }
 
 
-    /* ==========================================
-       LLEVAR LA PANTALLA AL RESULTADO
-       ========================================== */
+      // ==========================================
+      // PROGRAMA S072
+      // ==========================================
 
-    resultado.scrollIntoView({
-      behavior:"smooth",
-      block:"start"
-    });
+      else if(
+        String(datos.columnaC || "")
+        .trim()
+        .toUpperCase() === "S072"
+      ){
+
+        tituloPrincipal.innerHTML = `
+          Asambleas Informativas
+          <br>
+          Beca Universal de Educación Básica Rita Cetina Gutiérrez
+        `;
+
+        logoPrincipal.src = "LOGO BASICA.png";
+
+        imagenInferiorHTML = `
+          <img
+            src="BASICA.jpeg"
+            alt="Logo Básica"
+            class="imagen-inferior"
+          >
+        `;
+
+      }
+
+
+      // ==========================================
+      // SI NO SE RECONOCE EL PROGRAMA
+      // ==========================================
+
+      else{
+
+        resetDefault();
+
+      }
+
+
+      // ==========================================
+      // MOSTRAR RESULTADO
+      // ==========================================
+
+      div.innerHTML = `
+
+        <div class="card">
+
+          <h2>🏫 ${datos.escuela}</h2>
+
+          <div class="item">
+            <span class="icon">🕒</span>
+            <b>Atención:</b> ${datos.atencion}
+          </div>
+
+          <div class="item">
+            <span class="icon">🏢</span>
+            <b>Sede:</b> ${datos.sede}
+          </div>
+
+          <div class="item">
+            <span class="icon">📍</span>
+            <b>Dirección:</b> ${datos.direccion}
+          </div>
+
+        </div>
+
+        ${imagenInferiorHTML}
+
+      `;
+
+    }
 
   }
 
+
+  // ==========================================
+  // ERROR DE CONEXIÓN
+  // ==========================================
 
   catch(error){
 
     console.error(error);
 
-    mensaje.style.color = "#7a1f3d";
+    div.innerHTML = `
+      <p class="error">
+        ⚠️ Error al consultar información
+      </p>
+    `;
 
-    mensaje.textContent =
-      "Ocurrió un error al realizar la consulta. Intenta nuevamente.";
-
-    resultado.classList.add("oculto");
+    resetDefault();
 
   }
 
 }
-
-
-/* =====================================================
-   PERMITIR CONSULTAR CON LA TECLA ENTER
-   ===================================================== */
-
-cctInput.addEventListener("keypress", function(event){
-
-  if(event.key === "Enter"){
-
-    consultarCCT();
-
-  }
-
-});
 
 </script>
 
