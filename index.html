@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Asambleas Informativas Beca Universal de Educación Media Superior “Benito Juárez” y Jóvenes Escribiendo el Futuro
-  Hidalgo</title>
-
+<title>Asambleas Informativas Beca Universal de Educación Media Superior “Benito Juárez” y Jóvenes Escribiendo el Futuro Hidalgo</title>
 <style>
-
 body{
   margin:0;
   padding:0;
@@ -20,7 +15,6 @@ body{
   align-items:center;
   min-height:100vh;
 }
-
 .container{
   width:90%;
   max-width:550px;
@@ -30,21 +24,18 @@ body{
   box-shadow:0 5px 20px rgba(0,0,0,0.12);
   text-align:center;
 }
-
 h1{
   color:#7a1f3d;
   font-size:34px;
   margin-bottom:10px;
   line-height:1.4;
 }
-
 .subtitulo{
   font-size:20px;
   color:#444;
   margin-bottom:30px;
   line-height:1.5;
 }
-
 input{
   width:100%;
   padding:18px;
@@ -54,13 +45,11 @@ input{
   box-sizing:border-box;
   text-align:center;
 }
-
 input:focus{
   outline:none;
   border-color:#7a1f3d;
   box-shadow:0 0 8px rgba(122,31,61,0.25);
 }
-
 button{
   width:100%;
   margin-top:20px;
@@ -73,11 +62,9 @@ button{
   cursor:pointer;
   transition:0.3s;
 }
-
 button:hover{
   background:#5e1730;
 }
-
 .card{
   margin-top:30px;
   background:#faf5f7;
@@ -86,61 +73,60 @@ button:hover{
   text-align:left;
   border:1px solid #eadde2;
 }
-
 .card h2{
   color:#7a1f3d;
   margin-top:0;
   margin-bottom:20px;
 }
-
 .item{
   margin-bottom:18px;
   font-size:20px;
   color:#333;
   line-height:1.5;
 }
-
 .icon{
   font-size:24px;
   margin-right:10px;
 }
-
 .error{
   margin-top:20px;
   color:#c62828;
   font-size:22px;
   font-weight:bold;
 }
-
 .loader{
   margin-top:20px;
   font-size:22px;
   color:#7a1f3d;
 }
-
 .footer{
   margin-top:25px;
   font-size:16px;
   color:#777;
 }
-
+/* Estilo para la imagen ubicada debajo del resultado */
+.imagen-inferior {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  margin: 25px auto 0 auto;
+  display: block;
+  border-radius: 12px;
+}
 </style>
-
 </head>
-
 <body>
-
 <div class="container">
-
- <h1>
-  Asambleas Informativas
-  <br>
-  Beca Universal de Educación Media Superior "Benito Juárez"
-  <br>
-  y Jóvenes Escribiendo el Futuro<br>
-  Hidalgo
-</h1>
-
+  <!-- Imagen principal agregada arriba del título -->
+  <img id="logoPrincipal" src="Imagen11.png" alt="Logo Principal" style="max-width: 100%; height: auto; margin-bottom: 15px;">
+  <h1 id="tituloPrincipal">
+    Asambleas Informativas
+    <br>
+    Beca Universal de Educación Media Superior "Benito Juárez"
+    <br>
+    y Jóvenes Escribiendo el Futuro<br>
+    Hidalgo
+  </h1>
   <div class="subtitulo">
     Coloca la clave de la escuela para conocer la programación.
   </div>
@@ -150,73 +136,86 @@ button:hover{
     id="cct"
     placeholder="Ingresa tu CCT"
   >
-
   <button onclick="buscar()">
     🔎 CONSULTAR
   </button>
-
   <div id="resultado"></div>
-
- <div class="footer">
-  Becas Bienestar<br>
-  Coordinación Nacional<br>
-  Hidalgo
+  <div class="footer">
+    Becas Bienestar<br>
+    Coordinación Nacional<br>
+    Hidalgo
+  </div>
 </div>
-
-</div>
-
 <script>
-
 async function buscar(){
-
   const cct = document
     .getElementById("cct")
     .value
     .trim();
-
   const div = document.getElementById("resultado");
+  const logoPrincipal = document.getElementById("logoPrincipal");
+  const tituloPrincipal = document.getElementById("tituloPrincipal");
+  // Variables para restaurar el estado original
+  const tituloOriginal = Asambleas Informativas<br>Beca Universal de Educación Media Superior "Benito Juárez"<br>y Jóvenes Escribiendo el Futuro<br>Hidalgo;
+  const logoOriginal = "Imagen11.png";
 
+  // Función para resetear a los valores por defecto
+  function resetDefault() {
+    logoPrincipal.src = logoOriginal;
+    tituloPrincipal.innerHTML = tituloOriginal;
+  }
   if(!cct){
-
     div.innerHTML = `
       <p class="error">
         ⚠️ Ingresa tu CCT
       </p>
     `;
-
+    resetDefault();
     return;
   }
-
   div.innerHTML = `
     <p class="loader">
       ⏳ Consultando información...
     </p>
   `;
-
-  const url = "https://script.google.com/macros/s/AKfycbxtl4V2dcZDiTLTWBFWz-_0WwhOjieoKRqdYHhuXq2Otaf2j5ywJrmRxWMGa7xEiCpJ/exec";
-
+  const url = "https://script.google.com/macros/s/AKfycbwxhnALaXIWcNpVYBoivS96mrrboVeeG7K4yG0jFfDw6ZZASdf9lmV4Bb9XJOv0r8eR/exec";
   try{
-
     const respuesta = await fetch(
       url + "?cct=" + encodeURIComponent(cct) + "&t=" + new Date().getTime(),
       { cache: "no-store" }
     );
-
     const datos = await respuesta.json();
-
     if(datos.error){
-
       div.innerHTML = `
         <p class="error">
           ❌ ${datos.error}
         </p>
       `;
-
+      resetDefault();
     }else{
-
+      let imagenInferiorHTML = "";
+      // Evaluación del valor devuelto en la Columna C
+      if(datos.columnaC === "S311") {
+        tituloPrincipal.innerHTML = Asambleas Informativas<br>Beca Universal de Educación Media Superior "Benito Juárez";
+        logoPrincipal.src = "LOGO EMS.png";
+        imagenInferiorHTML = <img src="EMS.jpeg" alt="Logo EMS" class="imagen-inferior">;
+      } 
+      else if(datos.columnaC === "S283") {
+        tituloPrincipal.innerHTML = Asambleas Informativas<br>Beca Jóvenes Escribiendo el Futuro;
+        logoPrincipal.src = "LOGO JEF.png";
+        imagenInferiorHTML = <img src="JEF.jpeg" alt="Logo JEF" class="imagen-inferior">;
+      } 
+      else if(datos.columnaC === "S072") {
+        tituloPrincipal.innerHTML = Asambleas Informativas<br>Beca Universal de Educación Básica Rita Cetina Gutiérrez;
+        logoPrincipal.src = "LOGO BASICA.png";
+        imagenInferiorHTML = <img src="BASICA.jpeg" alt="Logo Básica" class="imagen-inferior">;
+      } 
+      else {
+        resetDefault();
+      }
+      // Estructura de la tarjeta + Imagen abajo
       div.innerHTML = `
         <div class="card">
-
           <h2>🏫 ${datos.escuela}</h2>
 
           <div class="item">
@@ -233,13 +232,11 @@ async function buscar(){
             <span class="icon">📍</span>
             <b>Dirección:</b> ${datos.direccion}
           </div>
-
         </div>
+        ${imagenInferiorHTML}
       `;
     }
-
   }catch(error){
-
     console.error(error);
 
     div.innerHTML = `
@@ -247,10 +244,9 @@ async function buscar(){
         ⚠️ Error al consultar información
       </p>
     `;
+    resetDefault();
   }
 }
-
 </script>
-
 </body>
 </html>
