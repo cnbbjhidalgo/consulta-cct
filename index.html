@@ -178,7 +178,7 @@ async function buscar(){
       ⏳ Consultando información...
     </p>
   `;
-  const url = "https://script.google.com/macros/s/AKfycbwxhnALaXIWcNpVYBoivS96mrrboVeeG7K4yG0jFfDw6ZZASdf9lmV4Bb9XJOv0r8eR/exec";
+  const url = "https://script.google.com/macros/s/AKfycbzzV64AGsFJNJ6YCDQg5qIDX-Lmnd3DDYGewrMVrKuA-PCuFuolZ9jQgb8ErOmFKP4L/exec";
   try{
     const respuesta = await fetch(
       url + "?cct=" + encodeURIComponent(cct) + "&t=" + new Date().getTime(),
