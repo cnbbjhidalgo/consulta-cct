@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asambleas Informativas Beca Universal de Educación Media Superior “Benito Juárez” Hidalgo</title>
+
+<title>Asambleas Informativas Beca Universal de Educación Media Superior “Benito Juárez” y Jóvenes Escribiendo el Futuro Hidalgo</title>
+
 <style>
 body{
   margin:0;
@@ -15,6 +17,7 @@ body{
   align-items:center;
   min-height:100vh;
 }
+
 .container{
   width:90%;
   max-width:550px;
@@ -24,18 +27,21 @@ body{
   box-shadow:0 5px 20px rgba(0,0,0,0.12);
   text-align:center;
 }
+
 h1{
   color:#7a1f3d;
   font-size:34px;
   margin-bottom:10px;
   line-height:1.4;
 }
+
 .subtitulo{
   font-size:20px;
   color:#444;
   margin-bottom:30px;
   line-height:1.5;
 }
+
 input{
   width:100%;
   padding:18px;
@@ -45,11 +51,13 @@ input{
   box-sizing:border-box;
   text-align:center;
 }
+
 input:focus{
   outline:none;
   border-color:#7a1f3d;
   box-shadow:0 0 8px rgba(122,31,61,0.25);
 }
+
 button{
   width:100%;
   margin-top:20px;
@@ -62,9 +70,11 @@ button{
   cursor:pointer;
   transition:0.3s;
 }
+
 button:hover{
   background:#5e1730;
 }
+
 .card{
   margin-top:30px;
   background:#faf5f7;
@@ -73,45 +83,52 @@ button:hover{
   text-align:left;
   border:1px solid #eadde2;
 }
+
 .card h2{
   color:#7a1f3d;
   margin-top:0;
   margin-bottom:20px;
 }
+
 .item{
   margin-bottom:18px;
   font-size:20px;
   color:#333;
   line-height:1.5;
 }
+
 .icon{
   font-size:24px;
   margin-right:10px;
 }
+
 .error{
   margin-top:20px;
   color:#c62828;
   font-size:22px;
   font-weight:bold;
 }
+
 .loader{
   margin-top:20px;
   font-size:22px;
   color:#7a1f3d;
 }
+
 .footer{
   margin-top:25px;
   font-size:16px;
   color:#777;
 }
+
 /* Estilo para la imagen ubicada debajo del resultado */
-.imagen-inferior {
-  width: 100%;
-  max-width: 280px;
-  height: auto;
-  margin: 25px auto 0 auto;
-  display: block;
-  border-radius: 12px;
+.imagen-inferior{
+  width:100%;
+  max-width:280px;
+  height:auto;
+  margin:25px auto 0 auto;
+  display:block;
+  border-radius:12px;
 }
 </style>
 </head>
@@ -171,13 +188,13 @@ async function buscar(){
     .toUpperCase();
 
   const div = document.getElementById("resultado");
-  const logoPrincipal = document.getElementById("logoPrincipal");
-  const tituloPrincipal = document.getElementById("tituloPrincipal");
 
+  const logoPrincipal =
+    document.getElementById("logoPrincipal");
 
-  // ==========================================
-  // VALORES ORIGINALES
-  // ==========================================
+  const tituloPrincipal =
+    document.getElementById("tituloPrincipal");
+
 
   const tituloOriginal = `
     Asambleas Informativas
@@ -187,25 +204,19 @@ async function buscar(){
     Hidalgo
   `;
 
+
   const logoOriginal = "CNBBBJ.png";
 
-
-  // ==========================================
-  // FUNCIÓN PARA RESTAURAR VALORES INICIALES
-  // ==========================================
 
   function resetDefault(){
 
     logoPrincipal.src = logoOriginal;
 
-    tituloPrincipal.innerHTML = tituloOriginal;
+    tituloPrincipal.innerHTML =
+      tituloOriginal;
 
   }
 
-
-  // ==========================================
-  // VALIDAR CCT
-  // ==========================================
 
   if(!cct){
 
@@ -221,10 +232,6 @@ async function buscar(){
   }
 
 
-  // ==========================================
-  // MENSAJE DE CONSULTA
-  // ==========================================
-
   div.innerHTML = `
     <p class="loader">
       ⏳ Consultando información...
@@ -232,12 +239,11 @@ async function buscar(){
   `;
 
 
-  // ==========================================
-  // GOOGLE APPS SCRIPT
-  // ==========================================
-
+  /*
+   * NUEVA URL DEL APPS SCRIPT
+   */
   const url =
-    "https://script.google.com/macros/s/AKfycbzzV64AGsFJNJ6YCDQg5qIDX-Lmnd3DDYGewrMVrKuA-PCuFuolZ9jQgb8ErOmFKP4L/exec";
+    "https://script.google.com/macros/s/AKfycbwydTBQfHY16ayA-Jv4de5BdbtGRZTzWF5zf0EDLXP-_hukFdnsPaEMnpGSYAoeDyuI/exec";
 
 
   try{
@@ -249,17 +255,14 @@ async function buscar(){
       "&t=" +
       new Date().getTime(),
       {
-        cache: "no-store"
+        cache:"no-store"
       }
     );
 
 
-    const datos = await respuesta.json();
+    const datos =
+      await respuesta.json();
 
-
-    // ==========================================
-    // SI EL CCT NO EXISTE
-    // ==========================================
 
     if(datos.error){
 
@@ -271,26 +274,18 @@ async function buscar(){
 
       resetDefault();
 
-    }
-
-
-    // ==========================================
-    // CCT ENCONTRADO
-    // ==========================================
-
-    else{
+    }else{
 
       let imagenInferiorHTML = "";
 
 
-      // ==========================================
-      // PROGRAMA S311
-      // ==========================================
-
+      /*
+       * PROGRAMA S311
+       */
       if(
         String(datos.columnaC || "")
-        .trim()
-        .toUpperCase() === "S311"
+          .trim()
+          .toUpperCase() === "S311"
       ){
 
         tituloPrincipal.innerHTML = `
@@ -299,7 +294,9 @@ async function buscar(){
           Beca Universal de Educación Media Superior "Benito Juárez"
         `;
 
-        logoPrincipal.src = "LOGO EMS.png";
+        logoPrincipal.src =
+          "LOGO EMS.png";
+
 
         imagenInferiorHTML = `
           <img
@@ -312,14 +309,13 @@ async function buscar(){
       }
 
 
-      // ==========================================
-      // PROGRAMA S283
-      // ==========================================
-
+      /*
+       * PROGRAMA S283
+       */
       else if(
         String(datos.columnaC || "")
-        .trim()
-        .toUpperCase() === "S283"
+          .trim()
+          .toUpperCase() === "S283"
       ){
 
         tituloPrincipal.innerHTML = `
@@ -328,7 +324,9 @@ async function buscar(){
           Beca Jóvenes Escribiendo el Futuro
         `;
 
-        logoPrincipal.src = "LOGO JEF.png";
+        logoPrincipal.src =
+          "LOGO JEF.png";
+
 
         imagenInferiorHTML = `
           <img
@@ -341,14 +339,13 @@ async function buscar(){
       }
 
 
-      // ==========================================
-      // PROGRAMA S072
-      // ==========================================
-
+      /*
+       * PROGRAMA S072
+       */
       else if(
         String(datos.columnaC || "")
-        .trim()
-        .toUpperCase() === "S072"
+          .trim()
+          .toUpperCase() === "S072"
       ){
 
         tituloPrincipal.innerHTML = `
@@ -357,7 +354,9 @@ async function buscar(){
           Beca Universal de Educación Básica Rita Cetina Gutiérrez
         `;
 
-        logoPrincipal.src = "LOGO BASICA.png";
+        logoPrincipal.src =
+          "LOGO BASICA.png";
+
 
         imagenInferiorHTML = `
           <img
@@ -370,10 +369,9 @@ async function buscar(){
       }
 
 
-      // ==========================================
-      // SI NO SE RECONOCE EL PROGRAMA
-      // ==========================================
-
+      /*
+       * SI NO SE RECONOCE EL PROGRAMA
+       */
       else{
 
         resetDefault();
@@ -381,37 +379,67 @@ async function buscar(){
       }
 
 
-      // ==========================================
-      // MOSTRAR RESULTADO
-      // ==========================================
-
+      /*
+       * MOSTRAR RESULTADO
+       */
       div.innerHTML = `
 
         <div class="card">
 
-          <h2>🏫 ${datos.escuela}</h2>
+          <h2>
+            🏫 ${datos.escuela}
+          </h2>
+
 
           <div class="item">
-            <span class="icon">📅</span>
-            <b>Fecha:</b> ${datos.fecha}
+
+            <span class="icon">
+              📅
+            </span>
+
+            <b>Fecha:</b>
+            ${datos.fecha || "Pendiente"}
+
           </div>
 
-          <div class="item">
-            <span class="icon">🕒</span>
-            <b>Horario:</b> ${datos.horario}
-          </div>
 
           <div class="item">
-            <span class="icon">🏢</span>
-            <b>Sede:</b> ${datos.sede}
+
+            <span class="icon">
+              🕒
+            </span>
+
+            <b>Horario:</b>
+            ${datos.horario || "Pendiente"}
+
           </div>
 
+
           <div class="item">
-            <span class="icon">📍</span>
-            <b>Dirección:</b> ${datos.direccion}
+
+            <span class="icon">
+              🏢
+            </span>
+
+            <b>Sede:</b>
+            ${datos.sede || "Pendiente"}
+
+          </div>
+
+
+          <div class="item">
+
+            <span class="icon">
+              📍
+            </span>
+
+            <b>Dirección:</b>
+            ${datos.direccion || "Pendiente"}
+
           </div>
 
         </div>
+
 
         ${imagenInferiorHTML}
 
@@ -421,10 +449,6 @@ async function buscar(){
 
   }
 
-
-  // ==========================================
-  // ERROR DE CONEXIÓN
-  // ==========================================
 
   catch(error){
 
