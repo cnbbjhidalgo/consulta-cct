@@ -240,7 +240,7 @@ async function buscar(){
 
 
   /*
-   * NUEVA URL DEL APPS SCRIPT
+   * URL ACTUAL DEL APPS SCRIPT
    */
   const url =
     "https://script.google.com/macros/s/AKfycbwydTBQfHY16ayA-Jv4de5BdbtGRZTzWF5zf0EDLXP-_hukFdnsPaEMnpGSYAoeDyuI/exec";
@@ -380,6 +380,26 @@ async function buscar(){
 
 
       /*
+       * FORMATEAR HORA
+       *
+       * Ejemplo:
+       * 08:00:00 a. m. → 08:00 a.m.
+       * 14:30:00 p. m. → 14:30 p.m.
+       */
+      let horarioFormateado = datos.horario || "Pendiente";
+
+      if(horarioFormateado !== "Pendiente"){
+
+        horarioFormateado = horarioFormateado
+          .replace(":00 a. m.", " a.m.")
+          .replace(":00 p. m.", " p.m.")
+          .replace(" a. m.", " a.m.")
+          .replace(" p. m.", " p.m.");
+
+      }
+
+
+      /*
        * MOSTRAR RESULTADO
        */
       div.innerHTML = `
@@ -410,7 +430,7 @@ async function buscar(){
             </span>
 
             <b>Horario:</b>
-            ${datos.horario || "Pendiente"}
+            ${horarioFormateado}
 
           </div>
 
