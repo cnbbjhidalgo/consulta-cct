@@ -11,7 +11,7 @@
 body{
   margin:0;
   padding:0;
-  font-family: Arial, sans-serif;
+  font-family:Arial,sans-serif;
   background:#f7f2f4;
   display:flex;
   justify-content:center;
@@ -122,7 +122,6 @@ button:hover{
   color:#777;
 }
 
-/* Estilo para la imagen ubicada debajo del resultado */
 .imagen-inferior{
   width:100%;
   max-width:280px;
@@ -132,17 +131,89 @@ button:hover{
   border-radius:12px;
 }
 
-/* Estilo para los vínculos detectados */
-.link-facebook{
-  color:#7a1f3d;
-  font-weight:bold;
-  text-decoration:underline;
+
+/* ============================= */
+/* TARJETA FACEBOOK              */
+/* ============================= */
+
+.facebook-card{
+  margin-top:12px;
+  border:1px solid #ddd;
+  border-radius:14px;
+  background:white;
+  overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
   cursor:pointer;
+  transition:0.2s;
 }
 
-.link-facebook:hover{
-  color:#5e1730;
+.facebook-card:hover{
+  box-shadow:0 4px 14px rgba(0,0,0,0.15);
+  transform:translateY(-1px);
 }
+
+.facebook-card-top{
+  padding:18px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.facebook-icon{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:#1877F2;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:bold;
+  flex-shrink:0;
+}
+
+.facebook-info{
+  min-width:0;
+}
+
+.facebook-title{
+  font-size:18px;
+  font-weight:bold;
+  color:#333;
+  margin-bottom:5px;
+}
+
+.facebook-url{
+  font-size:15px;
+  color:#777;
+  word-break:break-all;
+}
+
+.facebook-button{
+  display:block;
+  margin:0 18px 18px 18px;
+  padding:12px;
+  background:#1877F2;
+  color:white;
+  text-align:center;
+  border-radius:8px;
+  font-size:16px;
+  font-weight:bold;
+  text-decoration:none;
+}
+
+.facebook-button:hover{
+  background:#166fe5;
+}
+
+.facebook-message{
+  margin-bottom:10px;
+  font-size:19px;
+  color:#333;
+  line-height:1.4;
+}
+
 </style>
 </head>
 
@@ -150,12 +221,11 @@ button:hover{
 
 <div class="container">
 
-  <!-- Imagen principal -->
   <img
     id="logoPrincipal"
     src="CNBBBJ.png"
     alt="Logo Principal"
-    style="max-width: 100%; height: auto; margin-bottom: 15px;"
+    style="max-width:100%;height:auto;margin-bottom:15px;"
   >
 
   <h1 id="tituloPrincipal">
@@ -190,17 +260,14 @@ button:hover{
 
 </div>
 
+
 <script>
 
-/*
- * DETECTAR Y CONVERTIR AUTOMÁTICAMENTE LOS LINKS
- *
- * Ejemplo:
- *
- * CONECTATE EN ESTE PERFIL DE FACEBOOK https://www.facebook.com/JulioLeonT
- *
- * Se mostrará el texto completo y solamente la URL será clicable.
- */
+
+/* ==========================================
+   DETECTAR LINK DE FACEBOOK
+   ========================================== */
+
 function convertirLinks(texto){
 
   if(!texto){
@@ -209,15 +276,79 @@ function convertirLinks(texto){
 
   const urlRegex = /(https?:\/\/[^\s]+)/g;
 
-  return texto.replace(urlRegex, function(url){
+  return texto.replace(urlRegex,function(url){
+
+    /* Detectar Facebook */
+
+    if(
+      url.includes("facebook.com") ||
+      url.includes("fb.com")
+    ){
+
+      const mensaje =
+        texto.replace(url,"").trim();
+
+      return `
+
+        <div class="facebook-message">
+          ${mensaje}
+        </div>
+
+        <div
+          class="facebook-card"
+          onclick="window.open('${url}','_blank')"
+        >
+
+          <div class="facebook-card-top">
+
+            <div class="facebook-icon">
+              f
+            </div>
+
+            <div class="facebook-info">
+
+              <div class="facebook-title">
+                Perfil de Facebook
+              </div>
+
+              <div class="facebook-url">
+                ${url}
+              </div>
+
+            </div>
+
+          </div>
+
+          <a
+            href="${url}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="facebook-button"
+            onclick="event.stopPropagation();"
+          >
+            Ver perfil de Facebook
+          </a>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* Si es otro tipo de enlace */
 
     return `
+
       <a
         href="${url}"
         target="_blank"
         rel="noopener noreferrer"
         class="link-facebook"
-      >${url}</a>
+      >
+        ${url}
+      </a>
+
     `;
 
   });
@@ -225,15 +356,21 @@ function convertirLinks(texto){
 }
 
 
+/* ==========================================
+   BUSCAR
+   ========================================== */
+
 async function buscar(){
 
-  const cct = document
-    .getElementById("cct")
-    .value
-    .trim()
-    .toUpperCase();
+  const cct =
+    document
+      .getElementById("cct")
+      .value
+      .trim()
+      .toUpperCase();
 
-  const div = document.getElementById("resultado");
+  const div =
+    document.getElementById("resultado");
 
   const logoPrincipal =
     document.getElementById("logoPrincipal");
@@ -251,12 +388,14 @@ async function buscar(){
   `;
 
 
-  const logoOriginal = "CNBBBJ.png";
+  const logoOriginal =
+    "CNBBBJ.png";
 
 
   function resetDefault(){
 
-    logoPrincipal.src = logoOriginal;
+    logoPrincipal.src =
+      logoOriginal;
 
     tituloPrincipal.innerHTML =
       tituloOriginal;
@@ -285,25 +424,23 @@ async function buscar(){
   `;
 
 
-  /*
-   * URL ACTUAL DEL APPS SCRIPT
-   */
   const url =
     "https://script.google.com/macros/s/AKfycbwydTBQfHY16ayA-Jv4de5BdbtGRZTzWF5zf0EDLXP-_hukFdnsPaEMnpGSYAoeDyuI/exec";
 
 
   try{
 
-    const respuesta = await fetch(
-      url +
-      "?cct=" +
-      encodeURIComponent(cct) +
-      "&t=" +
-      new Date().getTime(),
-      {
-        cache:"no-store"
-      }
-    );
+    const respuesta =
+      await fetch(
+        url +
+        "?cct=" +
+        encodeURIComponent(cct) +
+        "&t=" +
+        new Date().getTime(),
+        {
+          cache:"no-store"
+        }
+      );
 
 
     const datos =
@@ -325,9 +462,8 @@ async function buscar(){
       let imagenInferiorHTML = "";
 
 
-      /*
-       * PROGRAMA S311
-       */
+      /* S311 */
+
       if(
         String(datos.columnaC || "")
           .trim()
@@ -355,9 +491,8 @@ async function buscar(){
       }
 
 
-      /*
-       * PROGRAMA S283
-       */
+      /* S283 */
+
       else if(
         String(datos.columnaC || "")
           .trim()
@@ -385,9 +520,8 @@ async function buscar(){
       }
 
 
-      /*
-       * PROGRAMA S072
-       */
+      /* S072 */
+
       else if(
         String(datos.columnaC || "")
           .trim()
@@ -415,9 +549,6 @@ async function buscar(){
       }
 
 
-      /*
-       * SI NO SE RECONOCE EL PROGRAMA
-       */
       else{
 
         resetDefault();
@@ -425,29 +556,29 @@ async function buscar(){
       }
 
 
-      /*
-       * FORMATEAR HORA
-       *
-       * Ejemplo:
-       * 08:00:00 a. m. → 08:00 a.m.
-       * 14:30:00 p. m. → 14:30 p.m.
-       */
-      let horarioFormateado = datos.horario || "Pendiente";
+      /* FORMATEAR HORA */
 
-      if(horarioFormateado !== "Pendiente"){
+      let horarioFormateado =
+        datos.horario || "Pendiente";
 
-        horarioFormateado = horarioFormateado
-          .replace(":00 a. m.", " a.m.")
-          .replace(":00 p. m.", " p.m.")
-          .replace(" a. m.", " a.m.")
-          .replace(" p. m.", " p.m.");
+
+      if(
+        horarioFormateado !==
+        "Pendiente"
+      ){
+
+        horarioFormateado =
+          horarioFormateado
+            .replace(":00 a. m."," a.m.")
+            .replace(":00 p. m."," p.m.")
+            .replace(" a. m."," a.m.")
+            .replace(" p. m."," p.m.");
 
       }
 
 
-      /*
-       * MOSTRAR RESULTADO
-       */
+      /* MOSTRAR RESULTADO */
+
       div.innerHTML = `
 
         <div class="card">
@@ -500,7 +631,10 @@ async function buscar(){
             </span>
 
             <b>Dirección:</b>
-            ${convertirLinks(datos.direccion || "Pendiente")}
+
+            ${convertirLinks(
+              datos.direccion || "Pendiente"
+            )}
 
           </div>
 
@@ -536,4 +670,3 @@ async function buscar(){
 
 </body>
 </html>
-
