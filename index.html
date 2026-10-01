@@ -132,12 +132,22 @@ button:hover{
 }
 
 
-/* ============================= */
-/* TARJETA FACEBOOK              */
-/* ============================= */
+/* ==========================================
+   TARJETA FACEBOOK
+   ========================================== */
+
+.facebook-container{
+  margin-top:10px;
+}
+
+.facebook-message{
+  font-size:19px;
+  color:#333;
+  line-height:1.4;
+  margin-bottom:12px;
+}
 
 .facebook-card{
-  margin-top:12px;
   border:1px solid #ddd;
   border-radius:14px;
   background:white;
@@ -207,11 +217,10 @@ button:hover{
   background:#166fe5;
 }
 
-.facebook-message{
-  margin-bottom:10px;
-  font-size:19px;
-  color:#333;
-  line-height:1.4;
+.link-facebook{
+  color:#7a1f3d;
+  font-weight:bold;
+  text-decoration:underline;
 }
 
 </style>
@@ -221,6 +230,7 @@ button:hover{
 
 <div class="container">
 
+  <!-- Imagen principal -->
   <img
     id="logoPrincipal"
     src="CNBBBJ.png"
@@ -276,23 +286,51 @@ function convertirLinks(texto){
 
   const urlRegex = /(https?:\/\/[^\s]+)/g;
 
-  return texto.replace(urlRegex,function(url){
+  const coincidencia = texto.match(urlRegex);
 
-    /* Detectar Facebook */
 
-    if(
-      url.includes("facebook.com") ||
-      url.includes("fb.com")
-    ){
+  /* Si no existe ningún enlace */
 
-      const mensaje =
-        texto.replace(url,"").trim();
+  if(!coincidencia){
 
-      return `
+    return texto;
 
-        <div class="facebook-message">
-          ${mensaje}
-        </div>
+  }
+
+
+  const url = coincidencia[0];
+
+
+  /* Texto antes del enlace */
+
+  const mensaje =
+    texto.substring(
+      0,
+      texto.indexOf(url)
+    ).trim();
+
+
+  /* Detectar Facebook */
+
+  if(
+    url.includes("facebook.com") ||
+    url.includes("fb.com")
+  ){
+
+    return `
+
+      <div class="facebook-container">
+
+        ${
+          mensaje
+          ? `
+            <div class="facebook-message">
+              ${mensaje}
+            </div>
+          `
+          : ""
+        }
+
 
         <div
           class="facebook-card"
@@ -319,6 +357,7 @@ function convertirLinks(texto){
 
           </div>
 
+
           <a
             href="${url}"
             target="_blank"
@@ -331,27 +370,29 @@ function convertirLinks(texto){
 
         </div>
 
-      `;
-
-    }
-
-
-    /* Si es otro tipo de enlace */
-
-    return `
-
-      <a
-        href="${url}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="link-facebook"
-      >
-        ${url}
-      </a>
+      </div>
 
     `;
 
-  });
+  }
+
+
+  /* Si es otro tipo de enlace */
+
+  return `
+
+    ${mensaje}
+
+    <a
+      href="${url}"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="link-facebook"
+    >
+      ${url}
+    </a>
+
+  `;
 
 }
 
@@ -424,6 +465,10 @@ async function buscar(){
   `;
 
 
+  /*
+   * URL ACTUAL DEL APPS SCRIPT
+   */
+
   const url =
     "https://script.google.com/macros/s/AKfycbwydTBQfHY16ayA-Jv4de5BdbtGRZTzWF5zf0EDLXP-_hukFdnsPaEMnpGSYAoeDyuI/exec";
 
@@ -462,7 +507,9 @@ async function buscar(){
       let imagenInferiorHTML = "";
 
 
-      /* S311 */
+      /*
+       * PROGRAMA S311
+       */
 
       if(
         String(datos.columnaC || "")
@@ -491,7 +538,9 @@ async function buscar(){
       }
 
 
-      /* S283 */
+      /*
+       * PROGRAMA S283
+       */
 
       else if(
         String(datos.columnaC || "")
@@ -520,7 +569,9 @@ async function buscar(){
       }
 
 
-      /* S072 */
+      /*
+       * PROGRAMA S072
+       */
 
       else if(
         String(datos.columnaC || "")
@@ -549,6 +600,10 @@ async function buscar(){
       }
 
 
+      /*
+       * SI NO SE RECONOCE EL PROGRAMA
+       */
+
       else{
 
         resetDefault();
@@ -556,7 +611,9 @@ async function buscar(){
       }
 
 
-      /* FORMATEAR HORA */
+      /*
+       * FORMATEAR HORA
+       */
 
       let horarioFormateado =
         datos.horario || "Pendiente";
@@ -577,7 +634,9 @@ async function buscar(){
       }
 
 
-      /* MOSTRAR RESULTADO */
+      /*
+       * MOSTRAR RESULTADO
+       */
 
       div.innerHTML = `
 
