@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -130,6 +131,18 @@ button:hover{
   display:block;
   border-radius:12px;
 }
+
+/* Estilo para los vínculos detectados */
+.link-facebook{
+  color:#7a1f3d;
+  font-weight:bold;
+  text-decoration:underline;
+  cursor:pointer;
+}
+
+.link-facebook:hover{
+  color:#5e1730;
+}
 </style>
 </head>
 
@@ -178,6 +191,39 @@ button:hover{
 </div>
 
 <script>
+
+/*
+ * DETECTAR Y CONVERTIR AUTOMÁTICAMENTE LOS LINKS
+ *
+ * Ejemplo:
+ *
+ * CONECTATE EN ESTE PERFIL DE FACEBOOK https://www.facebook.com/JulioLeonT
+ *
+ * Se mostrará el texto completo y solamente la URL será clicable.
+ */
+function convertirLinks(texto){
+
+  if(!texto){
+    return "";
+  }
+
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+  return texto.replace(urlRegex, function(url){
+
+    return `
+      <a
+        href="${url}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="link-facebook"
+      >${url}</a>
+    `;
+
+  });
+
+}
+
 
 async function buscar(){
 
@@ -454,7 +500,7 @@ async function buscar(){
             </span>
 
             <b>Dirección:</b>
-            ${datos.direccion || "Pendiente"}
+            ${convertirLinks(datos.direccion || "Pendiente")}
 
           </div>
 
@@ -490,3 +536,4 @@ async function buscar(){
 
 </body>
 </html>
+
