@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -273,7 +272,308 @@ button:hover{
 </div>
 
 
+
 <script>
+
+/* ==========================================================
+   CONFIGURACIÓN
+   ========================================================== */
+
+const URL_APPS_SCRIPT =
+  "https://script.google.com/macros/s/AKfycbwGbC7oC-q0KgIE-HVFerP6yJlPxaibDS_5YA7lMOcDrES8x1A2UxUaZ3t2LDDpxhsU/exec";
+
+
+/* ==========================================================
+   ID ANÓNIMO DEL NAVEGADOR / DISPOSITIVO
+   ========================================================== */
+
+const VISITOR_ID_KEY =
+  "asambleas_cct_visitor_id_v3";
+
+const STATS_QUEUE_KEY =
+  "asambleas_cct_stats_queue_v1";
+
+const STATS_BATCH_SIZE = 10;
+const STATS_SEND_DELAY_MS = 700;
+let statsSendTimer = null;
+let statsSending = false;
+
+
+function generarVisitorId(){
+
+  if(
+    window.crypto &&
+    typeof window.crypto.randomUUID === "function"
+  ){
+    return "U-" + window.crypto.randomUUID();
+  }
+
+  return (
+    "U-" +
+    Date.now().toString(36) +
+    "-" +
+    Math.random().toString(36).slice(2) +
+    Math.random().toString(36).slice(2)
+  );
+}
+
+
+function obtenerVisitorId(){
+
+  try{
+
+    let visitorId =
+      localStorage.getItem(VISITOR_ID_KEY);
+
+    if(!visitorId){
+
+      visitorId = generarVisitorId();
+
+      localStorage.setItem(
+        VISITOR_ID_KEY,
+        visitorId
+      );
+    }
+
+    return visitorId;
+
+  }catch(error){
+
+    return generarVisitorId();
+  }
+}
+
+
+/* ==========================================================
+   ESTADÍSTICAS - COLA LOCAL Y ENVÍO POR LOTES
+   ----------------------------------------------------------
+   La consulta NO espera a escribir estadísticas.
+   Las consultas se acumulan y se mandan en lotes.
+   ========================================================== */
+
+function leerColaEstadisticas(){
+
+  try{
+
+    const texto =
+      localStorage.getItem(STATS_QUEUE_KEY);
+
+    if(!texto){
+      return [];
+    }
+
+    const datos =
+      JSON.parse(texto);
+
+    return Array.isArray(datos)
+      ? datos
+      : [];
+
+  }catch(error){
+
+    return [];
+  }
+}
+
+
+function guardarColaEstadisticas(cola){
+
+  try{
+
+    localStorage.setItem(
+      STATS_QUEUE_KEY,
+      JSON.stringify(cola)
+    );
+
+    return true;
+
+  }catch(error){
+
+    return false;
+  }
+}
+
+
+function agregarEstadisticaLocal(cct, resultado, instante){
+
+  const evento = {
+    t: instante || new Date().toISOString(),
+    id: obtenerVisitorId(),
+    cct: String(cct || "").trim().toUpperCase(),
+    resultado: String(resultado || "SIN_RESULTADO")
+  };
+
+  let cola = leerColaEstadisticas();
+
+  cola.push(evento);
+
+  /*
+   * Evitamos que localStorage crezca indefinidamente si el usuario
+   * permanece sin conexión. Conservamos las 100 últimas consultas.
+   */
+  if(cola.length > 100){
+    cola = cola.slice(-100);
+  }
+
+  if(!guardarColaEstadisticas(cola)){
+
+    /*
+     * Si localStorage no está disponible, intentamos mandar
+     * inmediatamente una sola consulta sin bloquear la interfaz.
+     */
+    enviarLoteEstadisticas([evento]);
+    return;
+  }
+
+  if(cola.length >= STATS_BATCH_SIZE){
+    enviarLoteEstadisticas();
+    return;
+  }
+
+  programarEnvioEstadisticas();
+}
+
+
+function programarEnvioEstadisticas(){
+
+  if(statsSendTimer !== null){
+    return;
+  }
+
+  statsSendTimer = setTimeout(function(){
+
+    statsSendTimer = null;
+    enviarLoteEstadisticas();
+
+  }, STATS_SEND_DELAY_MS);
+}
+
+
+async function enviarLoteEstadisticas(eventosForzados){
+
+  if(statsSending){
+    return;
+  }
+
+  let cola = leerColaEstadisticas();
+
+  if(eventosForzados && eventosForzados.length){
+    cola = eventosForzados.slice(0, STATS_BATCH_SIZE);
+  }
+
+  if(!cola.length){
+    return;
+  }
+
+  const lote =
+    cola.slice(0, STATS_BATCH_SIZE);
+
+  statsSending = true;
+
+  try{
+
+    const body = new URLSearchParams();
+
+    body.set("action", "registrar_lote");
+    body.set("payload", JSON.stringify(lote));
+
+    const respuesta = await fetch(
+      URL_APPS_SCRIPT,
+      {
+        method: "POST",
+        body: body,
+        keepalive: true,
+        cache: "no-store"
+      }
+    );
+
+    const datos = await respuesta.json();
+
+    if(datos && datos.ok){
+
+      /*
+       * Sólo eliminamos del almacenamiento lo que realmente
+       * fue aceptado por el servidor.
+       */
+      const actual = leerColaEstadisticas();
+
+      const enviadosIds =
+        new Set(
+          lote.map(function(evento){
+            return [
+              evento.t,
+              evento.id,
+              evento.cct,
+              evento.resultado
+            ].join("|");
+          })
+        );
+
+      const restante = actual.filter(function(evento){
+
+        const clave = [
+          evento.t,
+          evento.id,
+          evento.cct,
+          evento.resultado
+        ].join("|");
+
+        return !enviadosIds.has(clave);
+      });
+
+      guardarColaEstadisticas(restante);
+
+      /*
+       * Si todavía quedan eventos, enviamos otro lote.
+       */
+      if(restante.length){
+        setTimeout(function(){
+          enviarLoteEstadisticas();
+        }, 100);
+      }
+
+    }
+
+  }catch(error){
+
+    /*
+     * No eliminamos el lote. Se conserva para reintentar.
+     */
+
+    console.warn(
+      "No se pudo enviar el lote de estadísticas:",
+      error
+    );
+
+  }finally{
+
+    statsSending = false;
+  }
+}
+
+
+/*
+ * Intentar enviar estadísticas pendientes cuando el usuario
+ * cambia de pestaña o abandona la página.
+ */
+
+window.addEventListener("visibilitychange", function(){
+
+  if(document.visibilityState === "hidden"){
+
+    enviarLoteEstadisticas();
+  }
+});
+
+
+window.addEventListener("pagehide", function(){
+
+  enviarLoteEstadisticas();
+});
+
+
+/* Intento inicial por si había consultas pendientes. */
+enviarLoteEstadisticas();
 
 
 /* ==========================================
@@ -287,23 +587,13 @@ function convertirLinks(texto){
   }
 
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-
   const coincidencia = texto.match(urlRegex);
 
-
-  /* Si no existe ningún enlace */
-
   if(!coincidencia){
-
     return texto;
-
   }
 
-
   const url = coincidencia[0];
-
-
-  /* Texto antes del enlace */
 
   const mensaje =
     texto.substring(
@@ -311,18 +601,13 @@ function convertirLinks(texto){
       texto.indexOf(url)
     ).trim();
 
-
-  /* Detectar Facebook */
-
   if(
     url.includes("facebook.com") ||
     url.includes("fb.com")
   ){
 
     return `
-
       <div class="facebook-container">
-
         ${
           mensaje
           ? `
@@ -332,7 +617,6 @@ function convertirLinks(texto){
           `
           : ""
         }
-
 
         <div
           class="facebook-card"
@@ -359,7 +643,6 @@ function convertirLinks(texto){
 
           </div>
 
-
           <a
             href="${url}"
             target="_blank"
@@ -371,20 +654,12 @@ function convertirLinks(texto){
           </a>
 
         </div>
-
       </div>
-
     `;
-
   }
 
-
-  /* Si es otro tipo de enlace */
-
   return `
-
     ${mensaje}
-
     <a
       href="${url}"
       target="_blank"
@@ -393,9 +668,7 @@ function convertirLinks(texto){
     >
       ${url}
     </a>
-
   `;
-
 }
 
 
@@ -421,7 +694,6 @@ async function buscar(){
   const tituloPrincipal =
     document.getElementById("tituloPrincipal");
 
-
   const tituloOriginal = `
     Asambleas Informativas
     <br>
@@ -430,10 +702,8 @@ async function buscar(){
     Hidalgo
   `;
 
-
   const logoOriginal =
     "CNBBBJ.png";
-
 
   function resetDefault(){
 
@@ -442,9 +712,7 @@ async function buscar(){
 
     tituloPrincipal.innerHTML =
       tituloOriginal;
-
   }
-
 
   if(!cct){
 
@@ -455,10 +723,8 @@ async function buscar(){
     `;
 
     resetDefault();
-
     return;
   }
-
 
   div.innerHTML = `
     <p class="loader">
@@ -466,21 +732,19 @@ async function buscar(){
     </p>
   `;
 
-
   /*
-   * URL ACTUAL DEL APPS SCRIPT
+   * Guardamos el instante de la consulta antes de llamar al servidor.
    */
-
-  const url =
-    "https://script.google.com/macros/s/AKfycbwydTBQfHY16ayA-Jv4de5BdbtGRZTzWF5zf0EDLXP-_hukFdnsPaEMnpGSYAoeDyuI/exec";
-
+  const instanteConsulta =
+    new Date().toISOString();
 
   try{
 
     const respuesta =
       await fetch(
-        url +
-        "?cct=" +
+        URL_APPS_SCRIPT +
+        "?action=consulta" +
+        "&cct=" +
         encodeURIComponent(cct) +
         "&t=" +
         new Date().getTime(),
@@ -489,9 +753,21 @@ async function buscar(){
         }
       );
 
-
     const datos =
       await respuesta.json();
+
+
+    /*
+     * REGISTRO ASÍNCRONO:
+     * no participa en el tiempo de respuesta de la consulta.
+     */
+    agregarEstadisticaLocal(
+      cct,
+      datos.error
+        ? String(datos.error)
+        : "ENCONTRADO",
+      instanteConsulta
+    );
 
 
     if(datos.error){
@@ -508,11 +784,7 @@ async function buscar(){
 
       let imagenInferiorHTML = "";
 
-
-      /*
-       * PROGRAMA S311
-       */
-
+      /* PROGRAMA S311 */
       if(
         String(datos.columnaC || "")
           .trim()
@@ -528,7 +800,6 @@ async function buscar(){
         logoPrincipal.src =
           "LOGO EMS.png";
 
-
         imagenInferiorHTML = `
           <img
             src="EMS.jpeg"
@@ -539,11 +810,7 @@ async function buscar(){
 
       }
 
-
-      /*
-       * PROGRAMA S283
-       */
-
+      /* PROGRAMA S283 */
       else if(
         String(datos.columnaC || "")
           .trim()
@@ -559,7 +826,6 @@ async function buscar(){
         logoPrincipal.src =
           "LOGO JEF.png";
 
-
         imagenInferiorHTML = `
           <img
             src="JEF.jpeg"
@@ -570,11 +836,7 @@ async function buscar(){
 
       }
 
-
-      /*
-       * PROGRAMA S072
-       */
-
+      /* PROGRAMA S072 */
       else if(
         String(datos.columnaC || "")
           .trim()
@@ -592,7 +854,6 @@ async function buscar(){
         logoPrincipal.src =
           "LOGO BASICA.png";
 
-
         imagenInferiorHTML = `
           <img
             src="BASICA.jpeg"
@@ -603,25 +864,14 @@ async function buscar(){
 
       }
 
-
-      /*
-       * SI NO SE RECONOCE EL PROGRAMA
-       */
-
       else{
-
         resetDefault();
-
       }
 
 
-      /*
-       * FORMATEAR HORA
-       */
-
+      /* FORMATEAR HORA */
       let horarioFormateado =
         datos.horario || "Pendiente";
-
 
       if(
         horarioFormateado !==
@@ -634,14 +884,10 @@ async function buscar(){
             .replace(":00 p. m."," p.m.")
             .replace(" a. m."," a.m.")
             .replace(" p. m."," p.m.");
-
       }
 
 
-      /*
-       * MOSTRAR RESULTADO
-       */
-
+      /* MOSTRAR RESULTADO */
       div.innerHTML = `
 
         <div class="card">
@@ -650,70 +896,40 @@ async function buscar(){
             🏫 ${datos.escuela}
           </h2>
 
-
           <div class="item">
-
-            <span class="icon">
-              📅
-            </span>
-
+            <span class="icon">📅</span>
             <b>Fecha:</b>
             ${datos.fecha || "Pendiente"}
-
           </div>
 
-
           <div class="item">
-
-            <span class="icon">
-              🕒
-            </span>
-
+            <span class="icon">🕒</span>
             <b>Horario:</b>
             ${horarioFormateado}
-
           </div>
 
-
           <div class="item">
-
-            <span class="icon">
-              🏢
-            </span>
-
+            <span class="icon">🏢</span>
             <b>Sede:</b>
             ${datos.sede || "Pendiente"}
-
           </div>
 
-
           <div class="item">
-
-            <span class="icon">
-              📍
-            </span>
-
+            <span class="icon">📍</span>
             <b>Dirección:</b>
-
             ${convertirLinks(
               datos.direccion || "Pendiente"
             )}
-
           </div>
 
         </div>
 
-
         ${imagenInferiorHTML}
 
       `;
-
     }
 
-  }
-
-
-  catch(error){
+  }catch(error){
 
     console.error(error);
 
@@ -724,12 +940,12 @@ async function buscar(){
     `;
 
     resetDefault();
-
   }
 
 }
 
 </script>
+
 
 </body>
 </html>
