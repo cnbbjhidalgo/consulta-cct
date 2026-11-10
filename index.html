@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Asambleas Informativas Beca Universal de Educación Básica “Rita Cetina” Hidalgo</title>
+<title>Entrega de Tarjetas - Becas Bienestar</title>
 
 <style>
 
@@ -346,9 +347,6 @@ function obtenerVisitorId(){
 
 /* ==========================================================
    ESTADÍSTICAS - COLA LOCAL Y ENVÍO POR LOTES
-   ----------------------------------------------------------
-   La consulta NO espera a escribir estadísticas.
-   Las consultas se acumulan y se mandan en lotes.
    ========================================================== */
 
 function leerColaEstadisticas(){
@@ -407,20 +405,12 @@ function agregarEstadisticaLocal(cct, resultado, instante){
 
   cola.push(evento);
 
-  /*
-   * Evitamos que localStorage crezca indefinidamente si el usuario
-   * permanece sin conexión. Conservamos las 100 últimas consultas.
-   */
   if(cola.length > 100){
     cola = cola.slice(-100);
   }
 
   if(!guardarColaEstadisticas(cola)){
 
-    /*
-     * Si localStorage no está disponible, intentamos mandar
-     * inmediatamente una sola consulta sin bloquear la interfaz.
-     */
     enviarLoteEstadisticas([evento]);
     return;
   }
@@ -491,10 +481,6 @@ async function enviarLoteEstadisticas(eventosForzados){
 
     if(datos && datos.ok){
 
-      /*
-       * Sólo eliminamos del almacenamiento lo que realmente
-       * fue aceptado por el servidor.
-       */
       const actual = leerColaEstadisticas();
 
       const enviadosIds =
@@ -523,9 +509,6 @@ async function enviarLoteEstadisticas(eventosForzados){
 
       guardarColaEstadisticas(restante);
 
-      /*
-       * Si todavía quedan eventos, enviamos otro lote.
-       */
       if(restante.length){
         setTimeout(function(){
           enviarLoteEstadisticas();
@@ -535,10 +518,6 @@ async function enviarLoteEstadisticas(eventosForzados){
     }
 
   }catch(error){
-
-    /*
-     * No eliminamos el lote. Se conserva para reintentar.
-     */
 
     console.warn(
       "No se pudo enviar el lote de estadísticas:",
@@ -551,11 +530,6 @@ async function enviarLoteEstadisticas(eventosForzados){
   }
 }
 
-
-/*
- * Intentar enviar estadísticas pendientes cuando el usuario
- * cambia de pestaña o abandona la página.
- */
 
 window.addEventListener("visibilitychange", function(){
 
@@ -572,7 +546,6 @@ window.addEventListener("pagehide", function(){
 });
 
 
-/* Intento inicial por si había consultas pendientes. */
 enviarLoteEstadisticas();
 
 
@@ -732,9 +705,6 @@ async function buscar(){
     </p>
   `;
 
-  /*
-   * Guardamos el instante de la consulta antes de llamar al servidor.
-   */
   const instanteConsulta =
     new Date().toISOString();
 
@@ -757,10 +727,6 @@ async function buscar(){
       await respuesta.json();
 
 
-    /*
-     * REGISTRO ASÍNCRONO:
-     * no participa en el tiempo de respuesta de la consulta.
-     */
     agregarEstadisticaLocal(
       cct,
       datos.error
@@ -792,13 +758,14 @@ async function buscar(){
       ){
 
         tituloPrincipal.innerHTML = `
-          Asambleas Informativas
+          Entrega de Tarjetas
           <br>
           Beca Universal de Educación Media Superior "Benito Juárez"
+          y "Jóvenes Escribiendo el Futuro"
         `;
 
         logoPrincipal.src =
-          "LOGO EMS.png";
+          "CNBBBJ.png";
 
         imagenInferiorHTML = `
           <img
