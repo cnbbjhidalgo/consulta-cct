@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -224,6 +223,44 @@ button:hover{
   text-decoration:underline;
 }
 
+
+/* ==========================================
+   CANAL DE WHATSAPP
+   ========================================== */
+
+.whatsapp-container{
+  margin-top:30px;
+  text-align:center;
+}
+
+.whatsapp-message{
+  font-size:20px;
+  color:#333;
+  line-height:1.5;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.whatsapp-link{
+  display:block;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.imagen-canal{
+  width:100%;
+  max-width:320px;
+  height:auto;
+  margin:0 auto;
+  display:block;
+  border-radius:12px;
+  transition:0.2s;
+}
+
+.imagen-canal:hover{
+  transform:scale(1.02);
+}
+
 </style>
 </head>
 
@@ -282,6 +319,48 @@ button:hover{
 
 const URL_APPS_SCRIPT =
   "https://script.google.com/macros/s/AKfycbwGbC7oC-q0KgIE-HVFerP6yJlPxaibDS_5YA7lMOcDrES8x1A2UxUaZ3t2LDDpxhsU/exec";
+
+
+/* ==========================================================
+   CONFIGURACIÓN CANAL DE WHATSAPP
+   ========================================================== */
+
+const URL_CANAL_WHATSAPP =
+  "https://whatsapp.com/channel/TU_ENLACE_DEL_CANAL";
+
+
+/* ==========================================================
+   FUNCIÓN PARA MOSTRAR EL CANAL DE WHATSAPP
+   ========================================================== */
+
+function mostrarCanalWhatsApp(){
+
+  return `
+    <div class="whatsapp-container">
+
+      <div class="whatsapp-message">
+        ¡Mantente informado sobre tu beca!
+        Sigue nuestro canal de WhatsApp y entérate de todo 👇🏻
+      </div>
+
+      <a
+        href="${URL_CANAL_WHATSAPP}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="whatsapp-link"
+      >
+
+        <img
+          src="CANAL.png"
+          alt="Canal de WhatsApp"
+          class="imagen-canal"
+        >
+
+      </a>
+
+    </div>
+  `;
+}
 
 
 /* ==========================================================
@@ -741,6 +820,8 @@ async function buscar(){
         <p class="error">
           ❌ ${datos.error}
         </p>
+
+        ${mostrarCanalWhatsApp()}
       `;
 
       resetDefault();
@@ -930,6 +1011,8 @@ async function buscar(){
         </div>
 
         ${imagenInferiorHTML}
+
+        ${mostrarCanalWhatsApp()}
 
       `;
     }
