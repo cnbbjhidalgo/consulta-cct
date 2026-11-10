@@ -232,11 +232,12 @@ button:hover{
 
 <div class="container">
 
-  <!-- Imagen principal -->
+  <!-- LOGO PRINCIPAL INICIAL -->
+
   <img
     id="logoPrincipal"
     src="CNBBBJ.png"
-    alt="Logo Principal"
+    alt="Logo CNBBBJ"
     style="max-width:100%;height:auto;margin-bottom:15px;"
   >
 
@@ -678,8 +679,8 @@ async function buscar(){
 
   function resetDefault(){
 
-    logoPrincipal.src =
-      logoOriginal;
+    logoPrincipal.src = logoOriginal;
+    logoPrincipal.alt = "Logo CNBBBJ";
 
     tituloPrincipal.innerHTML =
       tituloOriginal;
@@ -748,7 +749,10 @@ async function buscar(){
 
       let imagenInferiorHTML = "";
 
-      /* PROGRAMA S311 */
+      /* ==========================================
+         PROGRAMA S311 - BUEMS
+         ========================================== */
+
       if(
         String(datos.columnaC || "")
           .trim()
@@ -761,20 +765,31 @@ async function buscar(){
           Beca Universal de Educación Media Superior "Benito Juárez"
         `;
 
+        /* LOGO SUPERIOR EMS */
+
         logoPrincipal.src =
-          "CNBBBJ.png";
+          "LOGO EMS.png";
+
+        logoPrincipal.alt =
+          "Logo EMS";
+
+        /* IMAGEN INFERIOR EMS */
 
         imagenInferiorHTML = `
           <img
             src="EMS.jpeg"
-            alt="Logo EMS"
+            alt="Imagen EMS"
             class="imagen-inferior"
           >
         `;
 
       }
 
-      /* PROGRAMA S283 */
+
+      /* ==========================================
+         PROGRAMA S283 - JEF
+         ========================================== */
+
       else if(
         String(datos.columnaC || "")
           .trim()
@@ -787,20 +802,31 @@ async function buscar(){
           Beca "Jóvenes Escribiendo el Futuro"
         `;
 
+        /* LOGO SUPERIOR JEF */
+
         logoPrincipal.src =
           "LOGO JEF.png";
+
+        logoPrincipal.alt =
+          "Logo JEF";
+
+        /* IMAGEN INFERIOR JEF */
 
         imagenInferiorHTML = `
           <img
             src="JEF.jpeg"
-            alt="Logo JEF"
+            alt="Imagen JEF"
             class="imagen-inferior"
           >
         `;
 
       }
 
-      /* PROGRAMA S072 */
+
+      /* ==========================================
+         PROGRAMA S072 - BÁSICA
+         ========================================== */
+
       else if(
         String(datos.columnaC || "")
           .trim()
@@ -815,13 +841,20 @@ async function buscar(){
           Hidalgo
         `;
 
+        /* LOGO SUPERIOR BÁSICA */
+
         logoPrincipal.src =
-          "LOGO BASICA.png";
+          "LOGO BASICO.png";
+
+        logoPrincipal.alt =
+          "Logo Básica";
+
+        /* IMAGEN INFERIOR BÁSICA */
 
         imagenInferiorHTML = `
           <img
             src="BASICA.jpeg"
-            alt="Logo Básica"
+            alt="Imagen Básica"
             class="imagen-inferior"
           >
         `;
@@ -829,11 +862,16 @@ async function buscar(){
       }
 
       else{
+
         resetDefault();
+
       }
 
 
-      /* FORMATEAR HORA */
+      /* ==========================================
+         FORMATEAR HORA
+         ========================================== */
+
       let horarioFormateado =
         datos.horario || "Pendiente";
 
@@ -851,7 +889,10 @@ async function buscar(){
       }
 
 
-      /* MOSTRAR RESULTADO */
+      /* ==========================================
+         MOSTRAR RESULTADO
+         ========================================== */
+
       div.innerHTML = `
 
         <div class="card">
