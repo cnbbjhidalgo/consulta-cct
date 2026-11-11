@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -233,11 +234,18 @@ button:hover{
   text-align:center;
 }
 
+.whatsapp-title{
+  font-size:22px;
+  color:#7a1f3d;
+  line-height:1.4;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
 .whatsapp-message{
-  font-size:20px;
+  font-size:19px;
   color:#333;
   line-height:1.5;
-  font-weight:bold;
   margin-bottom:15px;
 }
 
@@ -326,7 +334,7 @@ const URL_APPS_SCRIPT =
    ========================================================== */
 
 const URL_CANAL_WHATSAPP =
-  "https://whatsapp.com/channel/TU_ENLACE_DEL_CANAL";
+  "https://whatsapp.com/channel/0029Vb6LSDJ30LKMPuEQML2n";
 
 
 /* ==========================================================
@@ -338,9 +346,13 @@ function mostrarCanalWhatsApp(){
   return `
     <div class="whatsapp-container">
 
+      <div class="whatsapp-title">
+        ¡Mantente al tanto de tu beca!
+      </div>
+
       <div class="whatsapp-message">
-        ¡Mantente informado sobre tu beca!
-        Sigue nuestro canal de WhatsApp y entérate de todo 👇🏻
+        Sigue nuestro canal de WhatsApp y recibe información,
+        avisos y actualizaciones importantes 👇🏻
       </div>
 
       <a
@@ -352,7 +364,7 @@ function mostrarCanalWhatsApp(){
 
         <img
           src="./CANAL.jpg"
-          alt="Canal de WhatsApp"
+          alt="Sigue nuestro canal de WhatsApp"
           class="imagen-canal"
         >
 
@@ -375,6 +387,7 @@ const STATS_QUEUE_KEY =
 
 const STATS_BATCH_SIZE = 10;
 const STATS_SEND_DELAY_MS = 700;
+
 let statsSendTimer = null;
 let statsSending = false;
 
@@ -660,6 +673,7 @@ function convertirLinks(texto){
 
     return `
       <div class="facebook-container">
+
         ${
           mensaje
           ? `
@@ -829,6 +843,7 @@ async function buscar(){
     }else{
 
       let imagenInferiorHTML = "";
+
 
       /* ==========================================
          PROGRAMA S311 - BUEMS
@@ -1010,9 +1025,13 @@ async function buscar(){
 
         </div>
 
-        ${imagenInferiorHTML}
+        <!-- CANAL DE WHATSAPP -->
 
         ${mostrarCanalWhatsApp()}
+
+        <!-- IMAGEN CORRESPONDIENTE AL PROGRAMA -->
+
+        ${imagenInferiorHTML}
 
       `;
     }
@@ -1025,6 +1044,8 @@ async function buscar(){
       <p class="error">
         ⚠️ Error al consultar información
       </p>
+
+      ${mostrarCanalWhatsApp()}
     `;
 
     resetDefault();
