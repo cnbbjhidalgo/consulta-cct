@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -243,9 +242,10 @@ button:hover{
 }
 
 .whatsapp-message{
-  font-size:19px;
+  font-size:20px;
   color:#333;
   line-height:1.5;
+  font-weight:bold;
   margin-bottom:15px;
 }
 
@@ -351,20 +351,21 @@ function mostrarCanalWhatsApp(){
       </div>
 
       <div class="whatsapp-message">
-        Sigue nuestro canal de WhatsApp y recibe información,
-        avisos y actualizaciones importantes 👇🏻
+        Sigue nuestro canal de WhatsApp<br>
+        y recibe información, avisos y actualizaciones importantes 👇🏻
       </div>
 
       <a
-        href="${URL_CANAL_WHATSAPP}"
+        href="https://whatsapp.com/channel/0029Vb6LSDJ30LKMPuEQML2n"
         target="_blank"
         rel="noopener noreferrer"
         class="whatsapp-link"
+        aria-label="Visitar canal de WhatsApp"
       >
 
         <img
           src="./CANAL.jpg"
-          alt="Sigue nuestro canal de WhatsApp"
+          alt="Únete al canal de WhatsApp"
           class="imagen-canal"
         >
 
@@ -387,7 +388,6 @@ const STATS_QUEUE_KEY =
 
 const STATS_BATCH_SIZE = 10;
 const STATS_SEND_DELAY_MS = 700;
-
 let statsSendTimer = null;
 let statsSending = false;
 
@@ -673,7 +673,6 @@ function convertirLinks(texto){
 
     return `
       <div class="facebook-container">
-
         ${
           mensaje
           ? `
