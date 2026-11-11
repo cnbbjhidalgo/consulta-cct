@@ -281,7 +281,7 @@ button:hover{
 
   <img
     id="logoPrincipal"
-    src="CNBBBJ.png"
+    src="CNBBBJ.jpeg"
     alt="Logo CNBBBJ"
     style="max-width:100%;height:auto;margin-bottom:15px;"
   >
@@ -767,7 +767,7 @@ async function buscar(){
   `;
 
   const logoOriginal =
-    "CNBBBJ.png";
+    "CNBBBJ.jpeg";
 
   function resetDefault(){
 
@@ -964,24 +964,11 @@ async function buscar(){
 
 
       /* ==========================================
-         FORMATEAR HORA
+         MOSTRAR HORARIO TAL COMO VIENE DE GOOGLE SHEETS
          ========================================== */
 
-      let horarioFormateado =
+      const horarioFormateado =
         datos.horario || "Pendiente";
-
-      if(
-        horarioFormateado !==
-        "Pendiente"
-      ){
-
-        horarioFormateado =
-          horarioFormateado
-            .replace(":00 a. m."," a.m.")
-            .replace(":00 p. m."," p.m.")
-            .replace(" a. m."," a.m.")
-            .replace(" p. m."," p.m.");
-      }
 
 
       /* ==========================================
