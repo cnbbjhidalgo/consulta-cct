@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -842,6 +843,7 @@ async function buscar(){
     }else{
 
       let imagenInferiorHTML = "";
+      let imagenDocumentosHTML = "";
 
 
       /* ==========================================
@@ -874,6 +876,16 @@ async function buscar(){
           <img
             src="EMS.jpeg"
             alt="Imagen EMS"
+            class="imagen-inferior"
+          >
+        `;
+
+        /* IMAGEN DOCUMENTOS BUEMS */
+
+        imagenDocumentosHTML = `
+          <img
+            src="Documentos.jpeg"
+            alt="Documentos BUEMS"
             class="imagen-inferior"
           >
         `;
@@ -1010,6 +1022,10 @@ async function buscar(){
           </div>
 
         </div>
+
+        <!-- IMAGEN DOCUMENTOS EXCLUSIVA BUEMS -->
+
+        ${imagenDocumentosHTML}
 
         <!-- CANAL DE WHATSAPP -->
 
