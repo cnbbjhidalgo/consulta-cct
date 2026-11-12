@@ -844,6 +844,7 @@ async function buscar(){
 
       let imagenInferiorHTML = "";
       let imagenDocumentosHTML = "";
+      let imagenJEFHTML = "";
 
 
       /* ==========================================
@@ -923,6 +924,22 @@ async function buscar(){
           <img
             src="JEF.jpeg"
             alt="Imagen JEF"
+            class="imagen-inferior"
+          >
+        `;
+
+        /* IMÁGENES MENOR Y MAYOR - JEF */
+
+        imagenJEFHTML = `
+          <img
+            src="menor.jpeg"
+            alt="Información para menores de edad"
+            class="imagen-inferior"
+          >
+
+          <img
+            src="mayor.jpeg"
+            alt="Información para mayores de edad"
             class="imagen-inferior"
           >
         `;
@@ -1026,6 +1043,10 @@ async function buscar(){
         <!-- IMAGEN DOCUMENTOS EXCLUSIVA BUEMS -->
 
         ${imagenDocumentosHTML}
+
+        <!-- IMÁGENES MENOR Y MAYOR EXCLUSIVAS JEF -->
+
+        ${imagenJEFHTML}
 
         <!-- CANAL DE WHATSAPP -->
 
